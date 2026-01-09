@@ -1,19 +1,18 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const express = require("express");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+const userRoutes = require("./routes/userRoutes");
 
 dotenv.config();
-
 connectDB();
 
 const app = express();
 app.use(express.json());
 
-const userRoutes = require('./routes/userroutes');
+app.use("/api/users", userRoutes);
 
-app.use('/api/users', userRoutes);
-app.get('/', (req, res) => {
-  res.send('Referral Management System API');
+app.get("/", (req, res) => {
+  res.send("Referral Management System API");
 });
 
 const PORT = process.env.PORT || 5000;

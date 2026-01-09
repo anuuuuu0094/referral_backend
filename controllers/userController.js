@@ -1,23 +1,23 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const user = require('../models/user');
+const User = require('../models/user');
 
 // Register User
 exports.registerUser = async (req, res) => {
     const { username, email, password } = req.body;
     try {
-       const exixtingUser = await user.findOne({ $or: [{ username }, { email }] });
-       if (exixtingUser) {
+       const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+       if (existingUser) {
            return res.status(400).json({ message: 'Username or Email already exists' });
        }    
          const hashedPassword = await bcrypt.hash(password, 10);
             
-         const user = await user.create({
+         const newUser = await User.create({
                 username,
                 email,
                 password: hashedPassword
          });
-         res.status(201).json({ message: 'User registered successfully', userId: user._id });
+         res.status(201).json({ message: 'User registered successfully', userId: newUser._id });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
@@ -25,11 +25,10 @@ exports.registerUser = async (req, res) => {
 
 // Login User
 exports.loginUser = async (req, res) => {
-    const { username, password } = req.body;
     try {
         const {email , password } = req.body;
 
-        const user = await user.findOne({email});
+        const user = await User.findOne({email});
         if(!user){
             return res.status(400).json({message: 'Invalid email or password'});
         }
