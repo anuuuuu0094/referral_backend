@@ -11,7 +11,7 @@ const {
 const  handleFileUpload = require("../middleware/fileUpload");
 
 // Candidate Routes
-router.get("/", candidateController.getCandidates);
+router.get("/all", candidateController.getCandidates);
 router.get("/metrics", metricsController.getMetrics);
 router.get("/:id", candidateController.getCandidateById);
 
